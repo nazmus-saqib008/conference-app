@@ -7,7 +7,7 @@ export default function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg bg-light fixed-top">
     <div className="container-fluid">
-      <Link className="navbar-brand" to="/">Conference</Link>
+      {/* <Link className="navbar-brand" to="/">Conference</Link> */}
       <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
       </button>
@@ -48,6 +48,15 @@ export default function Navbar() {
             </ul>
           </li>
 
+          <li className="nav-item dropdown">
+            <Link className="nav-link dropdown-toggle" to="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Sort By Timeline
+            </Link>
+            <ul className="dropdown-menu">
+              <li><Link className="dropdown-item" to="/sortAsc">Sooner to Later</Link></li>
+              <li><Link className="dropdown-item" to="/sortDesc">Later to Sooner</Link></li>
+            </ul>
+          </li>
         </ul>
       </div>
     </div>

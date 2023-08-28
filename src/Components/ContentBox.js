@@ -8,17 +8,39 @@ const ContentBox= (props)=>{
 
     const [contents, setContents]= useState([]);
 
-    const updatePage = async () => {
+    const sortAscending = (contents_uf)=>{
+        let contents_sorted= contents_uf.sort((a,b)=>{
+            return a.date_time.substring(0,10) > b.date_time.substring(0,10) ? 1:-1;
+        })
+        return contents_sorted;
+    }
+    const sortDescending = (contents_uf)=>{
+        let contents_sorted= contents_uf.sort((a,b)=>{
+            return a.date_time.substring(0,10) < b.date_time.substring(0,10) ? 1:-1;
+        })
+
+        return contents_sorted;
+    }
+
+    const fetchData = async () => {
         const url = `https://gdscdev.vercel.app/api`;
         let data = await fetch(url);
         let parsedData = await data.json();
         // setContents(parsedData.content.data);
 
-        var {country, timestamp}= props;
+        var {country, timestamp, sort}= props;
 
         let contents_uf= parsedData.content.data;
-        if(country==="All" && timestamp==="All"){
+        if(country==="All" && timestamp==="All" && sort==="None"){
             setContents(contents_uf);
+        }
+        else if(sort==="Asc"){
+            let contents_sorted= sortAscending(contents_uf);
+            setContents(contents_sorted);
+        }
+        else if(sort==="Desc"){
+            let contents_sorted= sortDescending(contents_uf);
+            setContents(contents_sorted);
         }
         else if(country==="All"){
             setContents(contents_uf.filter((item)=>{
@@ -27,13 +49,13 @@ const ContentBox= (props)=>{
         }
         else if(timestamp==="All"){
             setContents(contents_uf.filter((item)=>{
-                return country==item.venue_country
+                return country===item.venue_country
             }))
         }
     }
 
     useEffect(() => {
-            updatePage();
+            fetchData();
     }, [props])
 
     return (
@@ -42,7 +64,7 @@ const ContentBox= (props)=>{
 
                 <h3>Conferences</h3>
                     <div className="row">
-                        {contents.map((element) => {
+                        {contents.map((element, i) => {
                             return <div className="col-md-4" key={element.id}>
                                 <Item title={element.title} description={element.description} imgsrc={element.banner_image} date_time= {element.date_time} og_name={element.organiser_name} og_icon={element.organiser_icon} venue={element.venue_name} city={element.venue_city} country={element.venue_country}/>
                             </div>
